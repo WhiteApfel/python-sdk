@@ -8,37 +8,38 @@ import pyfondy.helpers as helper
 
 class Optional:
     def __init__(self):
-        ...
+        pass
 
 
 class Checkout(Resource):
     def url(self,
-            amount: Union[int, float],
-            currency: str,
-            order_id: Union[int, str] = None,
-            order_desc: str = None,
-            version: str = None,
-            response_url: str = None,
-            server_callback_url: str = None,
-            payment_system: List[str] = None,
-            default_payment_system: str = None,
-            lifetime: int = None,
-            merchant_data: str = None,
-            preauth: bool = False,
-            sender_email: str = None,
-            delayed: bool = True,
-            lang: str = None,
-            product_id: str = None,
-            required_rectoken: bool = False,
-            verification: bool = False,
-            verification_type: str = None,
-            rectoken: str = None,
-            receiver_rectoken: str = None,
-            design_id: int = None,
-            subscription: bool = False,
-            subscription_callback_url: str = None):
+                  amount: Union[int, float],
+                  currency: str,
+                  order_id: Union[int, str] = None,
+                  order_desc: str = None,
+                  version: str = None,
+                  response_url: str = None,
+                  server_callback_url: str = None,
+                  payment_system: List[str] = None,
+                  default_payment_system: str = None,
+                  lifetime: int = None,
+                  merchant_data: str = None,
+                  preauth: bool = None,
+                  sender_email: str = None,
+                  delayed: bool = None,
+                  lang: str = None,
+                  product_id: str = None,
+                  required_rectoken: bool = None,
+                  verification: bool = None,
+                  verification_type: str = None,
+                  rectoken: str = None,
+                  receiver_rectoken: str = None,
+                  design_id: int = None,
+                  subscription: bool = None,
+                  subscription_callback_url: str = None):
         """
-        Method to generate checkout url
+        Universal method to generate checkout url
+
         :param amount: order amount in NORMAL format. 10 - 10 dollars. 10.5 - 10 dollars and 50 cents
         :type amount: ``int`` or ``float
         :param currency: ``UAH``, ``RUB``, ``USD``, ``EUR``, ``GBR`` or ``CZK``
@@ -49,24 +50,49 @@ class Checkout(Resource):
         :type order_desc: ``str``, optional
         :return: api response
         """
-        if currency.upper() not in ['UAH', 'RUB', 'USD', 'EUR', 'GBR', 'CZK']:
-            ValueError("currency must be UAH, RUB, USD, EUR, GBR or CZK")
-        path = '/checkout/url/'
+        helper.check_currency(currency)
+        helper.check_verification_type(verification_type)
+
         order_id = str(order_id) or helper.generate_order_id()
-        data = {
-            'order_id': order_id,
-            'order_desc': order_desc or helper.get_desc(order_id),
-            'amount': int(amount * 100),
-            'currency': currency,
-        }
+        order_desc = order_desc or helper.get_desc(order_id)
+        data = locals()
+        data = {k: v if not type(v) is bool else "Y" if v else "N" for k, v in data.items() if v is not None}
+        if "payment_system" in data:
+            data["payment_system"] = ",".join(data["payment_system"])
+        path = '/checkout/url/'
         params = self._required(data)
         result = self.api.post(path, data=params, headers=self.__headers__)
 
         return self.response(result)
 
-    def token(self, amount: Union[int, float], currency: str, order_id: Union[int, str] = None, order_desc: str = None):
+    def token(self,
+              amount: Union[int, float],
+              currency: str,
+              order_id: Union[int, str] = None,
+              order_desc: str = None,
+              version: str = None,
+              response_url: str = None,
+              server_callback_url: str = None,
+              payment_system: List[str] = None,
+              default_payment_system: str = None,
+              lifetime: int = None,
+              merchant_data: str = None,
+              preauth: bool = None,
+              sender_email: str = None,
+              delayed: bool = None,
+              lang: str = None,
+              product_id: str = None,
+              required_rectoken: bool = None,
+              verification: bool = None,
+              verification_type: str = None,
+              rectoken: str = None,
+              receiver_rectoken: str = None,
+              design_id: int = None,
+              subscription: bool = None,
+              subscription_callback_url: str = None):
         """
-        Method to generate checkout token
+        Universal method to generate checkout url
+
         :param amount: order amount in NORMAL format. 10 - 10 dollars. 10.5 - 10 dollars and 50 cents
         :type amount: ``int`` or ``float
         :param currency: ``UAH``, ``RUB``, ``USD``, ``EUR``, ``GBR`` or ``CZK``
@@ -77,33 +103,15 @@ class Checkout(Resource):
         :type order_desc: ``str``, optional
         :return: api response
         """
-        if currency.upper() not in ['UAH', 'RUB', 'USD', 'EUR', 'GBR', 'CZK']:
-            ValueError("currency must be UAH, RUB, USD, EUR, GBR or CZK")
-        path = '/checkout/token/'
+        helper.check_currency(currency)
+
         order_id = str(order_id) or helper.generate_order_id()
-        data = {
-            'order_id': order_id,
-            'order_desc': order_desc or helper.get_desc(order_id),
-            'amount': int(amount * 100),
-            'currency': currency
-        }
-        params = self._required(data)
-        result = self.api.post(path, data=params, headers=self.__headers__)
-
-        return self.response(result)
-
-    def verification(self, data):
-        """
-        Method to generate checkout verification url
-        :param data: order data
-        :return: api response
-        """
-        path = '/checkout/url/'
-        verification_data = {
-            'verification': 'Y',
-            'verification_type': data.get('verification_type', 'code')
-        }
-        data.update(verification_data)
+        order_desc = order_desc or helper.get_desc(order_id)
+        data = locals()
+        data = {k: v if not type(v) is bool else "Y" if v else "N" for k, v in data.items() if v is not None}
+        if "payment_system" in data:
+            data["payment_system"] = ",".join(data["payment_system"])
+        path = '/checkout/token'
         params = self._required(data)
         result = self.api.post(path, data=params, headers=self.__headers__)
 

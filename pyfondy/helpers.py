@@ -52,6 +52,16 @@ def get_signature(secret_key, params, protocol):
         return sha1(sep.join(data).encode('utf-8')).hexdigest()
 
 
+def check_currency(currency):
+    if currency.upper() not in ['UAH', 'RUB', 'USD', 'EUR', 'GBR', 'CZK']:
+        raise ValueError('currency must be UAH, RUB, USD, EUR, GBR or CZK')
+
+
+def check_verification_type(verification_type):
+    if verification_type not in ['amount', 'code', None]:
+        raise ValueError('verification_type must be "amount" or "code"')
+
+
 def get_desc(order_id):
     """
     :param order_id: order id
