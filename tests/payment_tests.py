@@ -1,5 +1,5 @@
 from __future__ import absolute_import, unicode_literals
-from cloudipsp import Api, Payment, Pcidss
+from pyfondy import Api, Payment, Pcidss
 from .tests_helper import TestCase
 from datetime import datetime, timedelta
 

@@ -1,10 +1,10 @@
 from __future__ import absolute_import, unicode_literals
 from hashlib import sha1
-from cloudipsp.configuration import __sign_sep__ as sep
-from cloudipsp.exceptions import RequestError
+from pyfondy.configuration import __sign_sep__ as sep
+from pyfondy.exceptions import RequestError
 from uuid import uuid4
 
-import cloudipsp.utils as utils
+import pyfondy.utils as utils
 
 
 def get_data(data, req_type):

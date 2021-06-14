@@ -1,30 +1,92 @@
 from __future__ import absolute_import, unicode_literals
-from cloudipsp.resources import Resource
+from pyfondy.resources import Resource
 from datetime import datetime
+from typing import Union, List
 
-import cloudipsp.helpers as helper
+import pyfondy.helpers as helper
+
+
+class Optional:
+    def __init__(self):
+        ...
 
 
 class Checkout(Resource):
-    def url(self, data):
+    def url(self,
+            amount: Union[int, float],
+            currency: str,
+            order_id: Union[int, str] = None,
+            order_desc: str = None,
+            version: str = None,
+            response_url: str = None,
+            server_callback_url: str = None,
+            payment_system: List[str] = None,
+            default_payment_system: str = None,
+            lifetime: int = None,
+            merchant_data: str = None,
+            preauth: bool = False,
+            sender_email: str = None,
+            delayed: bool = True,
+            lang: str = None,
+            product_id: str = None,
+            required_rectoken: bool = False,
+            verification: bool = False,
+            verification_type: str = None,
+            rectoken: str = None,
+            receiver_rectoken: str = None,
+            design_id: int = None,
+            subscription: bool = False,
+            subscription_callback_url: str = None):
         """
         Method to generate checkout url
-        :param data: order data
+        :param amount: order amount in NORMAL format. 10 - 10 dollars. 10.5 - 10 dollars and 50 cents
+        :type amount: ``int`` or ``float
+        :param currency: ``UAH``, ``RUB``, ``USD``, ``EUR``, ``GBR`` or ``CZK``
+        :type currency: ``str``
+        :param order_id: order id.
+        :type order_id: ``int`` or ``str``, optional
+        :param order_desc: order description
+        :type order_desc: ``str``, optional
         :return: api response
         """
+        if currency.upper() not in ['UAH', 'RUB', 'USD', 'EUR', 'GBR', 'CZK']:
+            ValueError("currency must be UAH, RUB, USD, EUR, GBR or CZK")
         path = '/checkout/url/'
+        order_id = str(order_id) or helper.generate_order_id()
+        data = {
+            'order_id': order_id,
+            'order_desc': order_desc or helper.get_desc(order_id),
+            'amount': int(amount * 100),
+            'currency': currency,
+        }
         params = self._required(data)
         result = self.api.post(path, data=params, headers=self.__headers__)
 
         return self.response(result)
 
-    def token(self, data):
+    def token(self, amount: Union[int, float], currency: str, order_id: Union[int, str] = None, order_desc: str = None):
         """
         Method to generate checkout token
-        :param data: order data
+        :param amount: order amount in NORMAL format. 10 - 10 dollars. 10.5 - 10 dollars and 50 cents
+        :type amount: ``int`` or ``float
+        :param currency: ``UAH``, ``RUB``, ``USD``, ``EUR``, ``GBR`` or ``CZK``
+        :type currency: ``str``
+        :param order_id: order id.
+        :type order_id: ``int`` or ``str``, optional
+        :param order_desc: order description
+        :type order_desc: ``str``, optional
         :return: api response
         """
+        if currency.upper() not in ['UAH', 'RUB', 'USD', 'EUR', 'GBR', 'CZK']:
+            ValueError("currency must be UAH, RUB, USD, EUR, GBR or CZK")
         path = '/checkout/token/'
+        order_id = str(order_id) or helper.generate_order_id()
+        data = {
+            'order_id': order_id,
+            'order_desc': order_desc or helper.get_desc(order_id),
+            'amount': int(amount * 100),
+            'currency': currency
+        }
         params = self._required(data)
         result = self.api.post(path, data=params, headers=self.__headers__)
 

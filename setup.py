@@ -1,27 +1,26 @@
 from setuptools import find_packages, setup
 
-from cloudipsp.configuration import __version__
+from pyfondy.configuration import __version__
 
 desc = """
-    Cloudipsp python sdk. 
+    Fondy python sdk. 
     Docs   - https://docs.fondy.eu/
     README - https://github.com/cloudipsp/python-sdk/blob/master/README.md
   """
 
 requires_list = [
-    'requests',
     'six',
     'httpx'
 ]
 
 setup(
-    name='cloudipsp',
+    name='pyfondy',
     version=__version__,
-    url='https://github.com/cloudipsp/python-sdk/',
+    url='https://github.com/whiteapfel/pyfondy/',
     license='MIT',
-    description='Python SDK for cloudipsp clients.',
+    description='Python SDK for pyfondy clients.',
     long_description=desc,
-    author='Dmitriy Miroshnikov',
+    author='WhiteApfel, Dmitriy Miroshnikov',
     packages=find_packages(where='.', exclude=('tests*',)),
     install_requires=requires_list,
     classifiers=[
@@ -36,4 +35,5 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
     ])

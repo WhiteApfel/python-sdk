@@ -1,8 +1,8 @@
 from __future__ import absolute_import, unicode_literals
-from cloudipsp.resources import Resource
+from pyfondy.resources import Resource
 from datetime import datetime
 
-import cloudipsp.helpers as helper
+import pyfondy.helpers as helper
 
 
 class Pcidss(Resource):

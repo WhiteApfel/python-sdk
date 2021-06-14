@@ -1,4 +1,4 @@
-from cloudipsp import Api, Checkout
+from pyfondy import Api, Checkout
 
 api = Api(merchant_id=1396424,
           secret_key='test',

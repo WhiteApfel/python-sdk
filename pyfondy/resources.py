@@ -1,6 +1,6 @@
 from __future__ import absolute_import, unicode_literals
-from cloudipsp import utils
-from cloudipsp import exceptions
+from pyfondy import utils
+from pyfondy import exceptions
 
 
 class Resource(object):

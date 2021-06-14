@@ -1,7 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 
 import json
-from cloudipsp import Order
+from pyfondy import Order
 from .tests_helper import TestCase
 
 

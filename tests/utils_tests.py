@@ -1,5 +1,5 @@
 from __future__ import absolute_import, unicode_literals
-from cloudipsp import utils
+from pyfondy import utils
 from .tests_helper import TestCase
 
 

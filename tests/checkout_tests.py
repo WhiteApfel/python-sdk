@@ -1,5 +1,5 @@
 from __future__ import absolute_import, unicode_literals
-from cloudipsp import Checkout
+from pyfondy import Checkout
 from .tests_helper import TestCase
 
 import uuid

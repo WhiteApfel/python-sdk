@@ -24,12 +24,12 @@ Dependencies
 Installation
 ------------
 ```bash
-pip install cloudipsp
+pip install pyfondy
 ```
 ### Simple start
 
 ```python
-from cloudipsp import Api, Checkout
+from pyfondy import Api, Checkout
 api = Api(merchant_id=1396424,
           secret_key='test')
 checkout = Checkout(api=api)

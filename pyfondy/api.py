@@ -1,14 +1,14 @@
 from __future__ import absolute_import, unicode_literals
-from cloudipsp.configuration import (__api_url__, __protocol__, __r_type__)
-from cloudipsp import exceptions
+from pyfondy.configuration import (__api_url__, __protocol__, __r_type__)
+from pyfondy import exceptions
 from httpx import Client
 from httpx._models import Response
 from typing import Union
 
 import os
 import logging
-import cloudipsp.helpers as helper
-import cloudipsp.utils as utils
+import pyfondy.helpers as helper
+import pyfondy.utils as utils
 
 log = logging.getLogger(__name__)
 

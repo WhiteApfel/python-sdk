@@ -1,8 +1,8 @@
 from __future__ import absolute_import, unicode_literals
-from cloudipsp.resources import Resource
+from pyfondy.resources import Resource
 
-import cloudipsp.utils as utils
-import cloudipsp.helpers as helper
+import pyfondy.utils as utils
+import pyfondy.helpers as helper
 
 
 class Order(Resource):

@@ -26,4 +26,4 @@ script:
   - tox
 
 after_success:
-  - nosetests --with-coverage --cover-package=cloudipsp
+  - nosetests --with-coverage --cover-package=pyfondy

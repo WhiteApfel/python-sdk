@@ -2,7 +2,7 @@ import os
 import json
 
 from unittest import TestCase
-from cloudipsp import Api, Pcidss, helpers
+from pyfondy import Api, Pcidss, helpers
 
 
 class TestCase(TestCase):

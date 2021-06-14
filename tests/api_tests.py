@@ -1,5 +1,5 @@
 from __future__ import absolute_import, unicode_literals
-from cloudipsp import Api, exceptions
+from pyfondy import Api, exceptions
 from .tests_helper import TestCase
 
 
