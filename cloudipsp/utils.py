@@ -3,6 +3,7 @@ from collections import OrderedDict
 
 import re
 import json
+import ujson
 import base64
 import six.moves.urllib as urllib
 import xml.etree.cElementTree as ElementTree
@@ -12,14 +13,14 @@ def to_b64(data):
     """
     Encoding data string base64 algorithm
     """
-    return base64.b64encode(json.dumps(data).encode('utf-8')).decode('utf-8')
+    return base64.b64encode(ujson.dumps(data).encode('utf-8')).decode('utf-8')
 
 
 def from_b64(data):
     """
     Encoding data string base64 algorithm
     """
-    return base64.b64decode(json.dumps(data).encode('utf-8')).decode('utf-8')
+    return base64.b64decode(ujson.dumps(data).encode('utf-8')).decode('utf-8')
 
 
 def to_xml(data, start='<?xml version="1.0" encoding="UTF-8"?>'):
@@ -38,7 +39,7 @@ def to_json(data):
     :param data: params to convert to xml
     :return: json string
     """
-    return json.dumps(data)
+    return ujson.dumps(data)
 
 
 def to_form(data):
@@ -78,7 +79,7 @@ def from_json(json_string):
     :param json_string: json data string to encode
     :return: data dict
     """
-    return json.loads(json_string)
+    return ujson.loads(json_string)
 
 
 def from_form(form_string):
