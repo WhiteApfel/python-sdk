@@ -1,9 +1,11 @@
 from __future__ import absolute_import, unicode_literals
 from cloudipsp.configuration import (__api_url__, __protocol__, __r_type__)
 from cloudipsp import exceptions
+from httpx import Client
+from httpx._models import Response
+from typing import Union
 
 import os
-import requests
 import logging
 import cloudipsp.helpers as helper
 import cloudipsp.utils as utils
@@ -32,12 +34,13 @@ class Api(object):
         domain = kwargs.get('api_domain', 'api.fondy.eu')
         self.api_url = __api_url__.format(api_domain=domain)
         self.api_protocol = kwargs.get('api_protocol', __protocol__)
+        self.__client = Client()
         if self.api_protocol not in ('1.0', '2.0'):
             raise ValueError('Incorrect protocol version')
         if self.api_protocol == '2.0' and self.request_type != 'json':
             raise ValueError('In protocol \'2.0\' only json allowed')
 
-    def _headers(self):
+    def _headers(self) -> dict:
         """
         :return: request headers
         """
@@ -46,7 +49,7 @@ class Api(object):
             'Content-Type': helper.get_request_type(self.request_type),
         }
 
-    def _request(self, url, method, data, headers):
+    def _request(self, url: str, method: str, data: dict, headers: dict) -> str:
         """
         :param url: request url
         :param method: request method, POST default
@@ -54,15 +57,18 @@ class Api(object):
         :param headers: request headers
         :return: api response
         """
+        if not method.upper() in ['POST', 'GET']:
+            raise ValueError('method must be "GET" or "POST"')
+
         log.debug('Request Type: %s' % self.request_type)
         log.debug('URL: %s' % url)
         log.debug('Data: %s' % str(data))
         log.debug('Headers: %s' % str(headers))
 
-        response = requests.request(method, url, data=data, headers=headers)
+        response = self.__client.request(method, url, data=data, headers=headers)
         return self._response(response, response.content.decode('utf-8'))
 
-    def _response(self, response, content):
+    def _response(self, response: Response, content: str) -> str:
         """
         :param response: api response
         :param content: api response body
@@ -70,8 +76,8 @@ class Api(object):
         """
         status = response.status_code
 
-        log.debug('Status: %s' % str(status))
-        log.debug('Content: %s' % content)
+        log.debug(f'Status: {str(status)}')
+        log.debug(f'Content: {content}')
 
         if status in (200, 201):
             return content
@@ -79,13 +85,16 @@ class Api(object):
         raise exceptions.ServiceError(
             'Response code is: {status}'.format(status=status))
 
-    def post(self, url, data=list, headers=None):
+    def post(self, url: str, data: dict = None, headers: dict = None):
         """
         :param url: endpoint api url
         :param data: request data
         :param headers: request headers
         :return: request
         """
+        if data is None:
+            data = {}
+
         log.debug('Protocol version: %s' % self.request_type)
 
         if 'merchant_id' not in data:

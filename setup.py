@@ -10,7 +10,8 @@ desc = """
 
 requires_list = [
     'requests',
-    'six'
+    'six',
+    'httpx'
 ]
 
 setup(
