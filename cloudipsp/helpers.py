@@ -2,9 +2,9 @@ from __future__ import absolute_import, unicode_literals
 from hashlib import sha1
 from cloudipsp.configuration import __sign_sep__ as sep
 from cloudipsp.exceptions import RequestError
+from uuid import uuid4
 
 import cloudipsp.utils as utils
-import uuid
 
 
 def get_data(data, req_type):
@@ -64,7 +64,7 @@ def generate_order_id():
     """
     :return: unic order id
     """
-    return str(uuid.uuid4())
+    return str(uuid4())
 
 
 def check_data(data):
